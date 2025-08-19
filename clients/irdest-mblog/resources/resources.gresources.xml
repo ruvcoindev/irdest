@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/irdest/mblog_gtk/icons/scalable/actions/">
+    <file>send-symbolic.svg</file>
+  </gresource>
+</gresources>

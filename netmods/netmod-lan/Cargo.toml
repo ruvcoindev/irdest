@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2019-2021, 2023 Katharina Fey <kookie@spacekookie.de>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH LicenseRef-AppStore
+
+[package]
+name = "netmod-lan"
+description = "A local network discovery driver"
+version = "0.2.0"
+edition = "2018"
+license = "AGPL-3.0-or-later"
+
+[dependencies]
+task-notify = { version = "1.0", path = "../../utils/task-notify" }
+libratman = { version = "0.6", path = "../../ratman/libratman", features = ["netmod"] }
+
+async-trait = "0.1"
+bincode = "1.0"
+libc = "0.2"
+pnet_datalink = "0.31.0"
+serde = { version = "1.0", features = ["derive"] }
+tracing = "0.1"

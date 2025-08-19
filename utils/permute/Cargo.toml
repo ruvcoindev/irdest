@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2020 Leonora Tindall <nora@nora.codes>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH LicenseRef-AppStore
+
+[package]
+name = "permute"
+version = "0.1.0"
+description = "Generate permutations of vectors and slices in a memory-efficient and deterministic manner, using Heap's algorithm."
+categories = ["algorithms", "simulation"]
+keywords = ["combinatorics", "permutations", "heaps", "algorithm", "permutation"]
+license = "AGPL-3.0-or-later"
+edition = "2018"
+
+[dependencies]

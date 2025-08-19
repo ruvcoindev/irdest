@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2019-2021 Yureka Lilian <yuka@yuka.dev>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH LicenseRef-AppStore
+
+[package]
+name = "netmod-fuzz-fuzz"
+version = "0.0.0"
+authors = ["Automatically generated"]
+publish = false
+edition = "2018"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+async-std = { version = "1.0", features = ["attributes", "unstable"] }
+ratman = { path = "../../../ratman" }
+lazy_static = "1.4"
+
+[dependencies.netmod-mem]
+path = "../../netmod-mem"
+
+[dependencies.netmod-fuzz]
+path = ".."
+
+# Prevent this from interfering with workspaces
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "fuzz_target_1"
+path = "fuzz_targets/fuzz_target_1.rs"
+test = false
+doc = false

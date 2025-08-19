@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2022 Katharina Fey <kookie@spacekookie.de>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+[Unit]
+Description = A decentralised and peer-to-peer packet router
+
+[Service]
+## Be sure to check the user manual for details on how to run ratmand
+ExecStart = /path/to/ratmand -v debug

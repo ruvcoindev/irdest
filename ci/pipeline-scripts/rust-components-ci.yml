@@ -1,0 +1,206 @@
+# SPDX-FileCopyrightText: 2022 Yureka Lilian <yuka@yuka.dev>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH LicenseRef-AppStore
+
+# Script that triggers the pipelines for rust-components of `irdest`
+
+####################### RATMAN ROUTER
+
+build-ratmand:
+  tags: [ irdest-nix ]
+  stage: build
+  needs: [ build-ratman-dashboard ]
+  script:
+    - nix-build nix -A ratmand
+
+build-ratmand-static:
+  tags: [ irdest-nix ]
+  stage: build
+  needs: [ build-ratman-dashboard ]
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsStatic.buildPackages.rustc.all -A pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsStatic.ratmand -o result-ratmand
+  artifacts:
+    paths:
+      - result-ratmand/*
+
+build-ratmand-static-aarch64:
+  tags: [ irdest-nix ]
+  stage: build
+  needs: [ build-ratman-dashboard ]
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.stdenv -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.rustc.all -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.ratmand -o result-ratmand
+  artifacts:
+    paths:
+      - result-ratmand/*
+
+build-ratmand-static-armv7l-musl:
+  tags: [ irdest-nix ]
+  stage: build
+  allow_failure: true # fjall doesn't support 32bit systems so this is going to fail for a while
+  needs: [ build-ratman-dashboard ]
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.stdenv -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.rustc.all -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.ratmand -o result-ratmand
+  artifacts:
+    paths:
+      - result-ratmand/*
+
+####################### RATMAN TOOLING BINARIES
+
+build-ratman-tools-static:
+  tags: [ irdest-nix ]
+  stage: build
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsStatic.buildPackages.rustc.all -A pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsStatic.ratman-tools -o result-ratman-tools
+  artifacts:
+    paths:
+      - result-ratman-tools/*
+
+build-ratman-tools-static-aarch64:
+  tags: [ irdest-nix ]
+  stage: build
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.stdenv -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.rustc.all -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.ratman-tools -o result-ratman-tools
+  artifacts:
+    paths:
+      - result-ratman-tools/*
+
+build-ratman-tools-static-armv7l-musl:
+  tags: [ irdest-nix ]
+  stage: build
+  allow_failure: true # fjall doesn't support 32bit systems so this is going to fail for a while
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.stdenv -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.rustc.all -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.ratman-tools -o result-ratman-tools
+  artifacts:
+    paths:
+      - result-ratman-tools/*
+
+####################### IRDEST PROXY
+
+build-irdest-proxy-static:
+  tags: [ irdest-nix ]
+  stage: build
+  allow_failure: true # not updated yet
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsStatic.buildPackages.rustc -A pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsStatic.irdest-proxy -o result-irdest-proxy
+  artifacts:
+    paths:
+      - result-irdest-proxy/*
+
+build-irdest-proxy-static-aarch64:
+  tags: [ irdest-nix ]
+  stage: build
+  allow_failure: true # not updated yet
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.stdenv -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.rustc -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.irdest-proxy -o result-irdest-proxy
+  artifacts:
+    paths:
+      - result-irdest-proxy/*
+
+build-irdest-proxy-static-armv7l-musl:
+  tags: [ irdest-nix ]
+  stage: build
+  allow_failure: true # fjall doesn't support 32bit systems so this is going to fail for a while
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.stdenv -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.rustc -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.irdest-proxy -o result-irdest-proxy
+  artifacts:
+    paths:
+      - result-irdest-proxy/*
+
+####################### IRDEST MBLOG
+
+build-irdest-mblog:
+  tags: [ irdest-nix ]
+  allow_failure: true # not updated yet
+  stage: build
+  script:
+    - nix-build nix -A irdest-mblog
+
+####################### IRDEST INSTALLER
+
+build-installer-static:
+  tags: [ irdest-nix ]
+  stage: build
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsStatic.buildPackages.rustc.all -A pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsStatic.irdest-installer -o result-installer
+  artifacts:
+    paths:
+      - result-installer/*
+
+build-installer-static-aarch64:
+  tags: [ irdest-nix ]
+  stage: build
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.stdenv -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.rustc.all -A pkgsCross.aarch64-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.aarch64-multiplatform.pkgsStatic.irdest-installer -o result-installer
+  artifacts:
+    paths:
+      - result-installer/*
+
+build-installer-static-armv7l-musl:
+  tags: [ irdest-nix ]
+  stage: build
+  allow_failure: true # fjall doesn't support 32bit systems so this is going to fail for a while
+  script:
+    - nix-env -iA cachix -f https://cachix.org/api/v1/install
+    - cachix use irdest -O ~/.config/nix
+    - echo "trusted-public-keys = $CACHE_PUBKEYS" >> ~/.config/nix/nix.conf
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.stdenv -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.rustc.all -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.buildPackages.cargo -o toolchain
+    - cachix push irdest ./toolchain* || echo "couldn't push"
+    - nix-build nix -A pkgsCross.armv7l-hf-multiplatform.pkgsStatic.irdest-installer -o result-installer
+  artifacts:
+    paths:
+      - result-installer/*

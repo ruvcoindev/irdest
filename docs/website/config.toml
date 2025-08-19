@@ -1,0 +1,21 @@
+baseURL = "/"
+title = "Irdest"
+theme = "irdest-theme"
+DefaultContentLanguage = "en"
+
+[params]
+  description = "Research project for decentralised communication"
+
+[languages]
+  [languages.en]
+    weight = 1
+    LanguageName = "English"
+  [languages.de]
+    weight = 3
+    LanguageName = "Deutsch"
+  [languages.ar]
+    weight = 2
+    LanguageName = "العربية"
+
+[markup.goldmark.renderer]
+  unsafe = true

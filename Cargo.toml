@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2018-2023 Katharina Fey <kookie@spacekookie.de>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+[workspace]
+resolver = "2"
+
+members = [
+    # The decentralised router
+    "ratman",
+    "ratman/libratman",
+
+    # Various utility crates
+    "utils/clockctrl",
+    "utils/eris-rs",
+    "utils/installer",
+    "utils/irdest-firmware-util",
+    "utils/task-notify",
+    "utils/tracing-syslog",
+    "utils/useful-netmod-bits",
+    "utils/zbus-nm",
+
+    # Available netmod drivers
+    "netmods/netmod-datalink",
+    "netmods/netmod-inet",
+    "netmods/netmod-lan",
+    "netmods/netmod-mem",
+    "netmods/netmod-fuzz",
+    "netmods/netmod-lora",
+    "netmods/netmod-wd",
+
+    # End-user applications (of varying complexity)
+    "clients/ratman-tools",
+    # "clients/android-vpn/jni",
+    # "clients/irdest-echo",
+    # "clients/irdest-mblog",
+    # "clients/irdest-proxy",
+]
+
+exclude = [
+    # Firmware abstractions and crates
+    "firmware/lora-modem",
+]

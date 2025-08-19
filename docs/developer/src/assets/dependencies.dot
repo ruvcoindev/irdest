@@ -1,0 +1,15 @@
+digraph {
+    Ratman -> identity
+    Ratman -> netmod
+    Ratman -> Alexandria
+
+    netmod -> identity
+
+    "irdest-core" -> "irdest-types"
+    "irdest-core" -> Alexandria
+    "irdest-core" -> Ratman
+    "irdest-core" -> "irpc-sdk"
+
+    "irdest-sdk" -> "irdest-types"
+    "irdest-sdk" -> "irpc-sdk"
+}

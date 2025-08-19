@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2021 Katharina Fey <kookie@spacekookie.de>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# Workspace-wide target directory
+target/
+
+# Nix out links
+result
+
+# generated book
+docs/user/book
+
+# test identity files
+id_*.json

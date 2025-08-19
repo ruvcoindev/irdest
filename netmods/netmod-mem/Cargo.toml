@@ -1,0 +1,10 @@
+[package]
+name = "netmod-mem"
+description = "A fully in-memory implementation of a netmod endpoint"
+version = "0.4.0"
+edition = "2018"
+license = "AGPL-3.0-or-later"
+
+[dependencies]
+async-trait = "0.1"
+libratman = { version = "0.6", path = "../../ratman/libratman", features = ["netmod"] }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{{ $.Site.LanguageCode | default "en" }}">
+  {{- partial "head.html" . -}}
+  {{- block "head-override" .}}{{- end }}
+  <body>
+    <div class="not-web3" style="display:none">
+      <marquee width="100%" direction="left" height="55px">
+        Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // Not blockchain // Not web3 // 
+      </marquee>
+    </div>
+    <header class="block">
+      <div class="wrap">
+        
+        <!-- top logo & nav bar -->
+        <div class="navbar">
+          <span class="logo"><a href="/" class="title-link"><img width="128px" src="/img/logo.svg" /></a></span>
+          <div class="navbar-links">
+            {{ with .Site.GetPage "home/nav" }}
+            <a class="navbar-link" href="/download">{{ .Params.Download }}</a>
+            <a class="navbar-link" href="/community">{{ .Params.Community }}</a>
+            <a class="navbar-link" href="https://lists.irde.st/archives/list/announce@lists.irde.st/latest">{{ .Params.Announcements }}</a>
+            <a class="navbar-link" href="/learn">{{ .Params.Learn }}</a>
+            {{ end }}
+          </div>
+        </div>
+
+        {{- block "header-title" . }}{{- end }}
+      </div>
+    </header>
+    
+    {{- block "main" . }}{{- end }}
+
+    {{- partial "footer.html" . -}}
+  </body>
+</html>

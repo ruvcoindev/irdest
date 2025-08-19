@@ -1,0 +1,109 @@
+    # SPDX-FileCopyrightText: 2019-2022 Katharina Fey <kookie@spacekookie.de>
+# SPDX-FileCopyrightText: 2022 embr <git@liclac.eu>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+[package]
+name = "ratmand"
+description = "A decentralised and peer-to-peer packet router"
+license = "AGPL-3.0-or-later"
+version = "0.6.0"
+edition = "2018"
+
+
+[features]
+
+## The dashboard should really always be included, since it will be
+## the main way users interact with the router.  For very low-power
+## targets it can be disabled with --no-default-features
+default = [ "dashboard", "datalink", "inet", "lan", "lora" ]
+dashboard = [ "tide", "rust-embed", "openapi_type", "prometheus-client" ]
+
+# Allow different netmods to be enabled or disabled at compile-time.
+# By default we want to include all of them (see above).  If a user
+# passes --no-default-features, they can then manually select the set
+# of netmods they want to include in the router binary.
+datalink = [ "netmod-datalink" ]
+# fuzz = [ "netmod-fuzz" ]
+inet = [ "netmod-inet" ]
+lan = [ "netmod-lan" ]
+lora = [ "netmod-lora" ]
+
+
+[dependencies]
+
+## Core dependencies.  If you're not sure where to add something, put
+## it here first.  Large clusters can then always be expanded later.
+async-eris = { version = "0.1", path = "../utils/eris-rs" }
+async-trait = "0.1"
+atomptr = "1.0"
+backoff = "0.4"
+bincode = "1.0"
+byteorder = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+tripwire = "0.1.0-alpha.0"
+twox-hash = "1.5"
+once_cell = "1.0"
+colored = "2.0"
+base32 = "0.4"
+
+## Cryptography stuff
+curve25519-dalek = "3.0.0"
+ed25519-dalek = "1.0.0"
+x25519-dalek = { version = "2.0.0-rc.2", features = ["static_secrets"] }
+chacha20 = "0.9"
+rand = "0.7"
+
+## Storage & Configuration
+deadpool-sqlite = { version = "0.5", features = ["rt_tokio_1"], default-features = false }
+kdl = "4.6"
+fjall = { version = "1.0", features = ["bloom"] }
+rmp-serde = "1.3.0"
+
+## Logging and logging accessories
+tracing = "0.1"
+tracing-futures = "0.2"
+tracing-subscriber = { version = "0.2", features = ["fmt"] }
+tracing-syslog = { version = "0.1", path = "../utils/tracing-syslog" }
+
+## Web dependencies
+openapi_type = { version = "0.4", optional = true }
+prometheus-client = { version = "0.16", optional = true }
+rust-embed = { version = "6.3", optional = true }
+serde_json = "1.0"
+tide = { version = "0.16", optional = true }
+
+## System integration and tooling
+clap = "2.0"
+directories = "4.0"
+igd = "*"
+ipnetwork = "*"
+nix = "0.23"
+pnet = "*"
+tempdir = "*"
+
+## Irdest and Ratman sub-components
+clockctrl = { version = "0.1", path = "../utils/clockctrl" }
+libratman = { version = "0.6", path = "libratman", features = [ "metrics", "daemon" ]}
+task-notify = { version = "1.0", path = "../utils/task-notify" }
+
+## Bundled network modules
+netmod-datalink = { path = "../netmods/netmod-datalink", version = "0.2", optional = true }
+netmod-inet = { path = "../netmods/netmod-inet", version = "0.4", optional = true }
+netmod-lan = { path = "../netmods/netmod-lan", version = "0.2", optional = true }
+netmod-lora = { path = "../netmods/netmod-lora", version = "0.1", optional = true }
+netmod-mem = { path = "../netmods/netmod-mem", version = "0.4", optional = true }
+
+
+[dev-dependencies]
+bincode = "1.2"
+netmod-inet = { path = "../netmods/netmod-inet", version = "*" }
+tracing-subscriber = { version = "0.2", features = ["fmt"] }
+
+# This dependency is required to make async tests in ratmand work
+# tokio = { version = "1.0", features = [ "macros" ] }
+
+criterion = { version = "0.4", features = ["html_reports"] }
+rand = "0.7"

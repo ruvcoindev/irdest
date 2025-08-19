@@ -1,0 +1,10 @@
+# Top level ci file that `triggers` the pipelines as per the structure defined
+
+include:
+  - ci/pipeline-scripts/*
+
+stages:
+  - lint
+  - build
+  - test
+  - bundle

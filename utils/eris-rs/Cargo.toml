@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2022 Yureka Lilian <yuka@yuka.dev>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+[package]
+name = "async-eris"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = "0.1"
+base32 = "0.4"
+blake2 = "0.10"
+chacha20 = "0.9"
+derive_more = "0.99"
+futures-lite = "1.12"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+
+[dev-dependencies]
+rand = "0.7"
+serde_json = "1.0"
+tokio = { version = "1.10", features = [ "full" ] }

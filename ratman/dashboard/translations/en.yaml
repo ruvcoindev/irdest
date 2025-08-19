@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2022 embr <git@liclac.eu>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH LicenseRef-AppStore
+
+application:
+  title: ratmand
+index:
+  title: Home
+  placeholder:
+    heading: Currently known addresses
+    greeting: ratmand keeps track of any address it has encountered on the network before. Following is a list of them. Further diagnostics tools will follow!
+addr:
+  group:
+    local: Local Addresses
+    remote: Remote Addresses
+api:
+  title: API Reference
